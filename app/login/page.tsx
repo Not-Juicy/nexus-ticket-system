@@ -2,17 +2,21 @@
 
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { TicketCheck } from "lucide-react"
+import { TicketCheck, Sun, Moon } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -36,8 +40,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm shadow-2xl border-zinc-700/50">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative">
+      {mounted && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="absolute top-4 right-4"
+          aria-label="Toggle theme"
+        >
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </Button>
+      )}
+      <Card className="w-full max-w-sm shadow-2xl">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-2">
             <div className="bg-primary/10 rounded-full p-3">
