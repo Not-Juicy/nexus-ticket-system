@@ -1,7 +1,7 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupLabel, SidebarSeparator } from "@/components/ui/sidebar"
 import { mainNav } from "@/components/app-shared"
 import { NavUser } from "@/components/nav-user"
-import { Headset, ChevronLeft } from "lucide-react"
+import { TicketCheck, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 
@@ -27,10 +27,13 @@ export function AppSidebar({ unassignedCount = 0, overdueCount = 0 }: AppSidebar
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader className="h-14 justify-center">
         <SidebarMenuButton render={<Link href="/" />} size="lg">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Headset className="size-4" />
+          <div className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-sm">
+            <TicketCheck className="size-4" />
           </div>
-          <span className="font-bold text-base tracking-tight">IT TICKETS</span>
+          <span className="font-bold text-base tracking-tight">
+            <span className="text-blue-600 dark:text-blue-400">Nexus</span>
+            <span className="text-muted-foreground font-normal">/Tickets</span>
+          </span>
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
