@@ -38,7 +38,17 @@ export function CreateTicketForm({ users }: { users: User[] }) {
         <Label htmlFor="description">Description</Label>
         <Textarea id="description" name="description" placeholder="Detailed description..." className="h-32" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="category">Category</Label>
+          <select id="category" name="category" defaultValue="other" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
+            <option value="hardware">Hardware</option>
+            <option value="software">Software</option>
+            <option value="network">Network</option>
+            <option value="access">Access / Account</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
           <select id="priority" name="priority" defaultValue="medium" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
@@ -57,6 +67,10 @@ export function CreateTicketForm({ users }: { users: User[] }) {
             ))}
           </select>
         </div>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="dueDate">Due Date</Label>
+        <Input id="dueDate" name="dueDate" type="date" className="h-10" />
       </div>
       <div className="flex gap-2 pt-2">
         <Button type="submit" className="gap-1">

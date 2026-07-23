@@ -19,6 +19,7 @@ model User {
   ticketsAssigned Ticket[] @relation("AssignedTo")
   comments        Comment[]
   activities      Activity[]
+  attachments     Attachment[]
 }
 
 model Ticket {
@@ -37,8 +38,9 @@ model Ticket {
   assignedTo  User? @relation("AssignedTo", fields: [assignedToId], references: [id])
   assignedToId Int?
 
-  comments  Comment[]
-  activities Activity[]
+  comments    Comment[]
+  activities  Activity[]
+  attachments Attachment[]
 }
 
 model Comment {
@@ -61,4 +63,20 @@ model Activity {
   ticketId Int
   user    User?  @relation(fields: [userId], references: [id])
   userId  Int?
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  fileName  String
+  fileSize  Int
+  mimeType  String
+  path      String
+  createdAt DateTime @default(now())
+
+  ticket  Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticketId Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+
+  @@index([ticketId])
 }

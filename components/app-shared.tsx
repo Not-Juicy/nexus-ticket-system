@@ -5,12 +5,8 @@ import {
   KanbanSquare,
   ClipboardList,
   ListTodo,
-  Monitor,
   Users,
-  BarChart3,
-  BookOpen,
-  Settings,
-  Headset,
+  UserCircle,
 } from "lucide-react"
 
 export type SidebarNavItem = {
@@ -32,12 +28,8 @@ export const mainNav: SidebarNavItem[] = [
   { title: "Tickets", path: "/tickets", icon: <TicketCheck /> },
   { title: "Kanban Board", path: "/tickets/kanban", icon: <KanbanSquare /> },
   { title: "My Tickets", path: "/tickets?assigned_to=me", icon: <ClipboardList /> },
-  { title: "All Tickets", path: "/tickets", icon: <ListTodo /> },
-  { title: "Assets", path: "#", icon: <Monitor /> },
   { title: "Users", path: "/users", icon: <Users /> },
-  { title: "Reports", path: "#", icon: <BarChart3 /> },
-  { title: "Knowledge Base", path: "#", icon: <BookOpen /> },
-  { title: "Settings", path: "#", icon: <Settings /> },
+  { title: "Profile", path: "/profile", icon: <UserCircle /> },
 ]
 
 export const navLinks = mainNav

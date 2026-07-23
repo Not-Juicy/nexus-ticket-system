@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { PlusCircle, ArrowRight } from "lucide-react"
+import { PlusCircle, ArrowRight, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export const dynamic = "force-dynamic"
@@ -20,7 +20,8 @@ export default async function TicketsPage({
 
   if (params.status) where.status = params.status
   if (params.priority) where.priority = params.priority
-  if (params.assigned_to === "unassigned") where.assignedToId = null
+  if (params.assigned_to === "me") where.assignedToId = parseInt(session.user.id)
+  else if (params.assigned_to === "unassigned") where.assignedToId = null
   else if (params.assigned_to) where.assignedToId = parseInt(params.assigned_to)
 
   const [tickets, users] = await Promise.all([
@@ -42,9 +43,14 @@ export default async function TicketsPage({
           <h1 className="text-2xl font-bold">Tickets</h1>
           <p className="text-sm text-muted-foreground">Manage and track all tickets</p>
         </div>
-        <Link href="/tickets/new" className="inline-flex items-center justify-center gap-1.5 rounded-lg h-8 px-2.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/80 transition-colors">
-          <PlusCircle className="size-4" /> New Ticket
-        </Link>
+        <div className="flex gap-2">
+          <a href="/api/export/csv" className="inline-flex items-center justify-center gap-1.5 rounded-lg h-8 px-2.5 text-sm font-medium border border-input bg-background hover:bg-accent transition-colors">
+            <Download className="size-3.5" /> Export
+          </a>
+          <Link href="/tickets/new" className="inline-flex items-center justify-center gap-1.5 rounded-lg h-8 px-2.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/80 transition-colors">
+            <PlusCircle className="size-4" /> New Ticket
+          </Link>
+        </div>
       </div>
 
       <div className="rounded-xl border bg-card shadow-sm">
@@ -79,7 +85,16 @@ export default async function TicketsPage({
         {tickets.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <p className="text-lg font-medium">No tickets found</p>
-            <p className="text-sm">Try different filters or create a new ticket</p>
+            <p className="text-sm mb-4">
+              {params.status || params.priority || params.assigned_to
+                ? "Try different filters or clear them above"
+                : "Get started by creating your first ticket"}
+            </p>
+            {!params.status && !params.priority && !params.assigned_to && (
+              <Link href="/tickets/new" className="inline-flex items-center gap-1.5 rounded-lg h-8 px-4 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/80 transition-colors">
+                <PlusCircle className="size-4" /> Create First Ticket
+              </Link>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
