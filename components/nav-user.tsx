@@ -16,23 +16,22 @@ export function NavUser() {
   return (
     <SidebarMenuItem>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <SidebarMenuButton
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-          >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-              {initials}
+        <SidebarMenuButton
+          size="lg"
+          render={<DropdownMenuTrigger />}
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
+            {initials}
+          </div>
+          {!isCollapsed && (
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">{user?.name || "User"}</span>
+              <span className="truncate text-xs text-muted-foreground">{user?.role || "member"}</span>
             </div>
-            {!isCollapsed && (
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user?.name || "User"}</span>
-                <span className="truncate text-xs text-muted-foreground">{user?.role || "member"}</span>
-              </div>
-            )}
-            {!isCollapsed && <ChevronUp className="ml-auto size-4" />}
-          </SidebarMenuButton>
-        </DropdownMenuTrigger>
+          )}
+          {!isCollapsed && <ChevronUp className="ml-auto size-4" />}
+        </SidebarMenuButton>
         <DropdownMenuContent side="top" className="w-56" align="end">
           <DropdownMenuItem>
             <UserIcon className="mr-2 size-4" />
