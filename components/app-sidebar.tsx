@@ -1,54 +1,85 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
-import { NavGroup } from "@/components/nav-group"
-import { footerNavLinks, navGroups } from "@/components/app-shared"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupLabel, SidebarSeparator } from "@/components/ui/sidebar"
+import { mainNav } from "@/components/app-shared"
 import { NavUser } from "@/components/nav-user"
-import { PlusIcon, TicketCheck } from "lucide-react"
+import { Headset, ChevronLeft } from "lucide-react"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  unassignedCount?: number
+  overdueCount?: number
+}
+
+const shortcuts = [
+  { title: "Unassigned Tickets", key: "unassigned" as const, color: "text-amber-500" },
+  { title: "Pending Approval", key: "pending" as const, color: "text-blue-500" },
+  { title: "Overdue Tickets", key: "overdue" as const, color: "text-red-500" },
+]
+
+export function AppSidebar({ unassignedCount = 0, overdueCount = 0 }: AppSidebarProps) {
+  const badgeCounts: Record<string, number> = {
+    unassigned: unassignedCount,
+    pending: 0,
+    overdue: overdueCount,
+  }
+
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader className="h-14 justify-center">
         <SidebarMenuButton render={<Link href="/" />} size="lg">
-          <TicketCheck className="text-primary" />
-          <span className="font-bold">NEXUS</span>
+          <div className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Headset className="size-4" />
+          </div>
+          <span className="font-bold text-base tracking-tight">IT TICKETS</span>
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              render={<Link href="/tickets/new" />}
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-              tooltip="New Ticket"
-            >
-              <PlusIcon />
-              <span>New Ticket</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarGroup>
-        {navGroups.map((group, index) => (
-          <NavGroup key={`sidebar-group-${index}`} {...group} />
-        ))}
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser />
-        {footerNavLinks.length > 0 && (
-          <SidebarMenu className="mt-2">
-            {footerNavLinks.map((item) => (
+          <SidebarMenu>
+            {mainNav.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
-                  render={item.path ? <Link href={item.path} /> : undefined}
-                  className="text-muted-foreground"
-                  isActive={item.isActive}
-                  size="sm"
+                  render={item.path && item.path !== "#" ? <Link href={item.path} /> : undefined}
+                  className={cn(item.path === "#" && "cursor-default opacity-70")}
+                  tooltip={item.title}
                 >
-                  {item.icon}<span>{item.title}</span>
+                  {item.icon}
+                  <span>{item.title}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
-        )}
+        </SidebarGroup>
+        <SidebarSeparator />
+        <SidebarGroup>
+          <SidebarGroupLabel>Shortcuts</SidebarGroupLabel>
+          <SidebarMenu>
+            {shortcuts.map((s) => (
+              <SidebarMenuItem key={s.title}>
+                <SidebarMenuButton className="text-muted-foreground" size="sm">
+                  <div className={cn("size-2 rounded-full", s.color.replace("text-", "bg-"))} />
+                  <span className="flex-1">{s.title}</span>
+                  {badgeCounts[s.key] > 0 && (
+                    <span className="flex size-5 items-center justify-center rounded-full bg-muted text-xs font-medium tabular-nums">
+                      {badgeCounts[s.key]}
+                    </span>
+                  )}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="sm" className="text-muted-foreground">
+              <ChevronLeft className="size-4" />
+              <span>Collapse</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

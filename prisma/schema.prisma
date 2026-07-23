@@ -18,6 +18,7 @@ model User {
   ticketsCreated  Ticket[] @relation("CreatedBy")
   ticketsAssigned Ticket[] @relation("AssignedTo")
   comments        Comment[]
+  activities      Activity[]
 }
 
 model Ticket {
@@ -26,6 +27,8 @@ model Ticket {
   description String?
   status      String   @default("open")
   priority    String   @default("medium")
+  category    String   @default("other")
+  dueDate     DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -34,7 +37,8 @@ model Ticket {
   assignedTo  User? @relation("AssignedTo", fields: [assignedToId], references: [id])
   assignedToId Int?
 
-  comments Comment[]
+  comments  Comment[]
+  activities Activity[]
 }
 
 model Comment {
@@ -46,4 +50,15 @@ model Comment {
   ticketId Int
   user     User?  @relation(fields: [userId], references: [id])
   userId   Int?
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  action    String
+  createdAt DateTime @default(now())
+
+  ticket  Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticketId Int
+  user    User?  @relation(fields: [userId], references: [id])
+  userId  Int?
 }

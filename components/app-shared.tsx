@@ -2,10 +2,15 @@ import type { ReactNode } from "react"
 import {
   LayoutDashboard,
   TicketCheck,
-  ListTodo,
   KanbanSquare,
-  PlusCircle,
+  ClipboardList,
+  ListTodo,
+  Monitor,
   Users,
+  BarChart3,
+  BookOpen,
+  Settings,
+  Headset,
 } from "lucide-react"
 
 export type SidebarNavItem = {
@@ -13,6 +18,7 @@ export type SidebarNavItem = {
   path?: string
   icon?: ReactNode
   isActive?: boolean
+  badge?: string | number
   subItems?: SidebarNavItem[]
 }
 
@@ -21,60 +27,19 @@ export type SidebarNavGroup = {
   items: SidebarNavItem[]
 }
 
-export const navGroups: SidebarNavGroup[] = [
-  {
-    items: [
-      {
-        title: "Dashboard",
-        path: "/",
-        icon: <LayoutDashboard />,
-      },
-    ],
-  },
-  {
-    label: "Tickets",
-    items: [
-      {
-        title: "All Tickets",
-        path: "/tickets",
-        icon: <ListTodo />,
-      },
-      {
-        title: "Kanban Board",
-        path: "/tickets/kanban",
-        icon: <KanbanSquare />,
-      },
-      {
-        title: "New Ticket",
-        path: "/tickets/new",
-        icon: <PlusCircle />,
-      },
-    ],
-  },
-  {
-    label: "Admin",
-    items: [
-      {
-        title: "Users",
-        path: "/users",
-        icon: <Users />,
-      },
-    ],
-  },
-]
-
-export type NavLink = {
-  title: string
-  path: string
-  icon?: ReactNode
-  isActive?: boolean
-}
-
-export const navLinks: NavLink[] = [
+export const mainNav: SidebarNavItem[] = [
   { title: "Dashboard", path: "/", icon: <LayoutDashboard /> },
-  { title: "Tickets", path: "/tickets", icon: <ListTodo /> },
-  { title: "Kanban", path: "/tickets/kanban", icon: <KanbanSquare /> },
+  { title: "Tickets", path: "/tickets", icon: <TicketCheck /> },
+  { title: "Kanban Board", path: "/tickets/kanban", icon: <KanbanSquare /> },
+  { title: "My Tickets", path: "/tickets?assigned_to=me", icon: <ClipboardList /> },
+  { title: "All Tickets", path: "/tickets", icon: <ListTodo /> },
+  { title: "Assets", path: "#", icon: <Monitor /> },
   { title: "Users", path: "/users", icon: <Users /> },
+  { title: "Reports", path: "#", icon: <BarChart3 /> },
+  { title: "Knowledge Base", path: "#", icon: <BookOpen /> },
+  { title: "Settings", path: "#", icon: <Settings /> },
 ]
+
+export const navLinks = mainNav
 
 export const footerNavLinks: SidebarNavItem[] = []

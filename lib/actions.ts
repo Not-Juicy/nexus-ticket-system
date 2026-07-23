@@ -5,6 +5,18 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { hash } from "bcryptjs"
 
+async function logActivity(ticketId: number, action: string) {
+  const session = await auth()
+  if (!session?.user) return
+  await prisma.activity.create({
+    data: {
+      action,
+      ticketId,
+      userId: parseInt(session.user.id),
+    },
+  })
+}
+
 export async function createTicket(formData: FormData) {
   const session = await auth()
   if (!session?.user) throw new Error("Unauthorized")
@@ -13,21 +25,27 @@ export async function createTicket(formData: FormData) {
   const description = formData.get("description") as string
   const priority = (formData.get("priority") as string) || "medium"
   const assignedTo = formData.get("assigned_to") as string
+  const category = (formData.get("category") as string) || "other"
+  const dueDate = formData.get("dueDate") as string
 
   if (!title?.trim()) throw new Error("Title is required")
 
-  await prisma.ticket.create({
+  const ticket = await prisma.ticket.create({
     data: {
       title: title.trim(),
       description: description || "",
       priority,
+      category,
+      dueDate: dueDate ? new Date(dueDate) : null,
       createdById: parseInt(session.user.id),
       assignedToId: assignedTo ? parseInt(assignedTo) : null,
     },
   })
 
+  await logActivity(ticket.id, "created")
+
   revalidatePath("/tickets")
-  revalidatePath("/dashboard")
+  revalidatePath("/")
 }
 
 export async function updateTicketStatus(ticketId: number, status: string) {
@@ -42,9 +60,11 @@ export async function updateTicketStatus(ticketId: number, status: string) {
     data: { status },
   })
 
+  await logActivity(ticketId, "status_changed")
+
   revalidatePath(`/tickets/${ticketId}`)
   revalidatePath("/tickets")
-  revalidatePath("/dashboard")
+  revalidatePath("/")
 }
 
 export async function updateTicketPriority(ticketId: number, priority: string) {
@@ -73,6 +93,8 @@ export async function assignTicket(ticketId: number, assignedToId: string) {
     },
   })
 
+  await logActivity(ticketId, "assigned")
+
   revalidatePath(`/tickets/${ticketId}`)
   revalidatePath("/tickets")
 }
@@ -91,6 +113,8 @@ export async function addComment(ticketId: number, formData: FormData) {
       userId: parseInt(session.user.id),
     },
   })
+
+  await logActivity(ticketId, "commented")
 
   revalidatePath(`/tickets/${ticketId}`)
 }
