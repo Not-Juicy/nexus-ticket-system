@@ -50,25 +50,25 @@ export default async function TicketsPage({
       <div className="rounded-xl border bg-card shadow-sm">
         <div className="p-4 border-b">
           <form method="GET" className="flex flex-wrap gap-2 items-end">
-            <select name="status" className="h-9 rounded-md border border-input bg-transparent px-3 text-sm">
+            <select name="status" defaultValue={params.status || ""} className="h-9 rounded-md border border-input bg-transparent px-3 text-sm">
               <option value="">All Status</option>
-              <option value="open" selected={params.status === "open"}>Open</option>
-              <option value="in_progress" selected={params.status === "in_progress"}>In Progress</option>
-              <option value="resolved" selected={params.status === "resolved"}>Resolved</option>
-              <option value="closed" selected={params.status === "closed"}>Closed</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
             </select>
-            <select name="priority" className="h-9 rounded-md border border-input bg-transparent px-3 text-sm">
+            <select name="priority" defaultValue={params.priority || ""} className="h-9 rounded-md border border-input bg-transparent px-3 text-sm">
               <option value="">All Priority</option>
-              <option value="low" selected={params.priority === "low"}>Low</option>
-              <option value="medium" selected={params.priority === "medium"}>Medium</option>
-              <option value="high" selected={params.priority === "high"}>High</option>
-              <option value="critical" selected={params.priority === "critical"}>Critical</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
             </select>
-            <select name="assigned_to" className="h-9 rounded-md border border-input bg-transparent px-3 text-sm">
+            <select name="assigned_to" defaultValue={params.assigned_to || ""} className="h-9 rounded-md border border-input bg-transparent px-3 text-sm">
               <option value="">All Assignees</option>
-              <option value="unassigned" selected={params.assigned_to === "unassigned"}>Unassigned</option>
+              <option value="unassigned">Unassigned</option>
               {users.map((u) => (
-                <option key={u.id} value={String(u.id)} selected={params.assigned_to === String(u.id)}>{u.username}</option>
+                <option key={u.id} value={String(u.id)}>{u.username}</option>
               ))}
             </select>
             <Button type="submit" variant="outline" size="sm">Filter</Button>

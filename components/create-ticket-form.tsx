@@ -41,9 +41,9 @@ export function CreateTicketForm({ users }: { users: User[] }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
-          <select id="priority" name="priority" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
+          <select id="priority" name="priority" defaultValue="medium" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
             <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
+            <option value="medium">Medium</option>
             <option value="high">High</option>
             <option value="critical">Critical</option>
           </select>
